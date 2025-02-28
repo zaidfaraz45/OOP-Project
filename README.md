@@ -29,9 +29,3 @@ This project is a two-player chess game developed with a graphical user interfac
 ## Technologies Used
 - *Language:* C++
 - *Library:* SFML (Simple and Fast Multimedia Library)
-
-## Installation
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/chess-game.git
-   cd chess-game
