@@ -36,6 +36,8 @@ class chessBoard
                 }
             }
         }
+
+        ~chessBoard(){}
 };
 
 int main()
