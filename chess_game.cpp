@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#define windowLength 1000
+#define windowWidth 1000
 using namespace std;
 
 class chessBoard
@@ -12,7 +14,8 @@ class chessBoard
  
         void make(sf::RenderWindow &window)
         {
-            sf::RectangleShape square(sf::Vector2(125.f, 125.f));
+            const float tileSize = windowWidth / 8;
+            sf::RectangleShape square(sf::Vector2(tileSize, tileSize));
 
             for (int row = 0; row < length; row++)
             {
@@ -27,7 +30,7 @@ class chessBoard
                         square.setFillColor(sf::Color(0, 0, 0));
                     }
 
-                    square.setPosition(sf::Vector2f(col * 125, row * 125));
+                    square.setPosition(sf::Vector2f(col * tileSize, row * tileSize));
 
                     window.draw(square);
                 }
@@ -37,7 +40,7 @@ class chessBoard
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode({1000, 1000}), "Chess Game");
+    sf::RenderWindow window(sf::VideoMode({windowLength, windowWidth}), "Chess Game");
     
     chessBoard board(8, 8);
 
