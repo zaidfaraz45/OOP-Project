@@ -8,21 +8,21 @@ const float tileSize = windowWidth / 8.0f;
 
 class chessBoard 
 {
-    int length;
-    int width;
+    int rows;
+    int columns;
 
 public:
-    chessBoard(int l, int w) : length(l), width(w) {}
+    chessBoard(int r, int c) : rows(r), columns(c) {}
 
     void make(sf::RenderWindow& window)
     {
         sf::RectangleShape square(sf::Vector2f(tileSize, tileSize));
 
-        for (int row = 0; row < length; row++) 
+        for (int i = 0; i < rows; i++) 
         {
-            for (int col = 0; col < width; col++) 
+            for (int j = 0; j < columns; j++) 
             {
-                if ((row + col) % 2 == 0) 
+                if ((i + j) % 2 == 0) 
                 {
                     square.setFillColor(sf::Color(130, 70, 52));  
                 }
@@ -31,13 +31,11 @@ public:
                     square.setFillColor(sf::Color(99, 53, 53));  
                 }
 
-                square.setPosition(sf::Vector2f(col * tileSize, row * tileSize));
+                square.setPosition(sf::Vector2f(j * tileSize, i * tileSize));
                 window.draw(square);
             }
         }
     }
-
-    ~chessBoard() {}
 };
 
 class ChessPiece
