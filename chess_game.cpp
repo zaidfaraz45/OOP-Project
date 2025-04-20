@@ -1,104 +1,181 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+using namespace std;
 
 const int windowLength = 1000;
 const int windowWidth = 1000;
-const float tileSize = windowWidth / 8;
+const float tileSize = windowWidth / 8.0f;
 
 class chessBoard 
 {
     int length;
     int width;
 
-    public:
-        chessBoard(int l, int w) : length(l), width(w) {}
+public:
+    chessBoard(int l, int w) : length(l), width(w) {}
 
-        void make(sf::RenderWindow& window)
+    void make(sf::RenderWindow& window)
+    {
+        sf::RectangleShape square(sf::Vector2f(tileSize, tileSize));
+
+        for (int row = 0; row < length; row++) 
         {
-            sf::RectangleShape square(sf::Vector2f(tileSize, tileSize));
-
-            for (int row = 0; row < length; row++) 
+            for (int col = 0; col < width; col++) 
             {
-                for (int col = 0; col < width; col++) 
+                if ((row + col) % 2 == 0) 
                 {
-                    if ((row + col) % 2 == 0) 
-                    {
-                        square.setFillColor(sf::Color(130, 70, 52));
-                    }
-                    else 
-                    {
-                        square.setFillColor(sf::Color(99, 53, 53));
-                    }
-
-                    square.setPosition(sf::Vector2f(col * tileSize, row * tileSize));
-                    window.draw(square);
+                    square.setFillColor(sf::Color(130, 70, 52));  
                 }
+                else 
+                {
+                    square.setFillColor(sf::Color(99, 53, 53));  
+                }
+
+                square.setPosition(sf::Vector2f(col * tileSize, row * tileSize));
+                window.draw(square);
             }
         }
+    }
 
-        ~chessBoard() {}
+    ~chessBoard() {}
 };
 
-class Pawn 
+class ChessPiece
 {
-    float size;
-    sf::Color color;
-    float x, y;
+    protected:   
+        float posX;
+        float posY;
+        string image;
 
     public:
-        Pawn(float s, const sf::Color& c, float X, float Y): size(s), color(c), x(X), y(Y) {}
+        ChessPiece(float x, float y, string i): posX(x), posY(y), image(i) {}  
 
-        void draw(sf::RenderWindow& window) 
-        {
-            sf::CircleShape lower(size * 0.3f);
-            lower.setFillColor(color);
-            lower.setPosition(sf::Vector2f(x + tileSize / 2 - size * 0.3f, y + tileSize * 0.9 - size * 0.6f));
-            window.draw(lower);
+        void make(sf::RenderWindow &window)
+        {  
+            sf::Texture texture(image);
+            sf::Sprite sprite(texture);
+            sprite.setPosition(sf::Vector2f(posX + tileSize / 4, posY + tileSize / 4));
+            float scaleX = tileSize / texture.getSize().x / 2;
+            float scaleY = tileSize / texture.getSize().y / 2;
+            sprite.setScale(sf::Vector2f(scaleX, scaleY));
 
-            sf::CircleShape middle(size * 0.2f);
-            middle.setFillColor(color);
-            middle.setPosition(sf::Vector2f(x + tileSize / 2 - size * 0.2f, y + tileSize * 0.9 - size * 0.9f));
-            window.draw(middle);
-
-            sf::CircleShape upper(size * 0.15f);
-            upper.setFillColor(color);
-            upper.setPosition(sf::Vector2f(x + tileSize / 2 - size * 0.15f, y + tileSize * 0.9 - size * 1.1f));
-            window.draw(upper);
+            window.draw(sprite);
         }
 };
 
+class WhitePawn: public ChessPiece
+{
+    public:
+        WhitePawn(float x, float y, string i): ChessPiece(x, y, i) {}
+};
+
+class BlackPawn: public ChessPiece
+{
+    public:
+        BlackPawn(float x, float y, string i): ChessPiece(x, y, i) {}
+};
+
+class WhiteRook: public ChessPiece
+{
+    public:
+        WhiteRook(float x, float y, string i): ChessPiece(x, y, i) {}
+};
+
+class BlackRook: public ChessPiece
+{
+    public:
+        BlackRook(float x, float y, string i): ChessPiece(x, y, i) {}
+};
+
+class WhiteKnight: public ChessPiece
+{
+    public:
+        WhiteKnight(float x, float y, string i): ChessPiece(x, y, i) {}
+};
+
+class BlackKnight: public ChessPiece
+{
+    public:
+        BlackKnight(float x, float y, string i): ChessPiece(x, y, i) {}
+};
+
+class WhiteBishop: public ChessPiece
+{
+    public:
+        WhiteBishop(float x, float y, string i): ChessPiece(x, y, i) {}
+};
+
+class BlackBishop: public ChessPiece
+{
+    public:
+        BlackBishop(float x, float y, string i): ChessPiece(x, y, i) {}
+};
+
+class WhiteQueen: public ChessPiece
+{
+    public:
+        WhiteQueen(float x, float y, string i): ChessPiece(x, y, i) {}
+};
+
+class BlackQueen: public ChessPiece
+{
+    public:
+        BlackQueen(float x, float y, string i): ChessPiece(x, y, i) {}
+};
+
+class WhiteKing: public ChessPiece
+{
+    public:
+        WhiteKing(float x, float y, string i): ChessPiece(x, y, i) {}
+};
+
+class BlackKing: public ChessPiece
+{
+    public:
+        BlackKing(float x, float y, string i): ChessPiece(x, y, i) {}
+};
 
 int main() 
 {
-    sf::RenderWindow window(sf::VideoMode({ windowLength, windowWidth }), "Chess Game");
+    sf::RenderWindow window(sf::VideoMode({windowLength, windowWidth}), "Chess Game");
 
     chessBoard board(8, 8);
 
-    float size = tileSize / 1.5;
+    WhitePawn* whitePawns[8];
+    BlackPawn* blackPawns[8];
 
-    Pawn whitePawns[8] = 
-    {
-        Pawn(size, sf::Color::White, 0 * tileSize, 6 * tileSize),
-        Pawn(size, sf::Color::White, 1 * tileSize, 6 * tileSize),
-        Pawn(size, sf::Color::White, 2 * tileSize, 6 * tileSize),
-        Pawn(size, sf::Color::White, 3 * tileSize, 6 * tileSize),
-        Pawn(size, sf::Color::White, 4 * tileSize, 6 * tileSize),
-        Pawn(size, sf::Color::White, 5 * tileSize, 6 * tileSize),
-        Pawn(size, sf::Color::White, 6 * tileSize, 6 * tileSize),
-        Pawn(size, sf::Color::White, 7 * tileSize, 6 * tileSize)
-    };
+    WhiteRook* whiteRooks[2];
+    BlackRook* blackRooks[2];
 
-    Pawn blackPawns[8] = 
+    WhiteKnight* whiteKnights[2];
+    BlackKnight* blackKnights[2];
+
+    WhiteBishop* whiteBishops[2];
+    BlackBishop* blackBishops[2];
+
+    WhiteQueen* whiteQueen = new WhiteQueen(3 * tileSize, 7 * tileSize, "white_queen.png");
+    BlackQueen* blackQueen = new BlackQueen(3 * tileSize, 0 * tileSize, "black_queen.png");
+
+    WhiteKing* whiteKing = new WhiteKing(4 * tileSize, 7 * tileSize, "white_king.png");
+    BlackKing* blackKing = new BlackKing(4 * tileSize, 0 * tileSize, "black_king.png");
+
+    for (int i = 0; i < 8; i++)
     {
-        Pawn(size, sf::Color::Black, 0 * tileSize, 1 * tileSize),
-        Pawn(size, sf::Color::Black, 1 * tileSize, 1 * tileSize),
-        Pawn(size, sf::Color::Black, 2 * tileSize, 1 * tileSize),
-        Pawn(size, sf::Color::Black, 3 * tileSize, 1 * tileSize),
-        Pawn(size, sf::Color::Black, 4 * tileSize, 1 * tileSize),
-        Pawn(size, sf::Color::Black, 5 * tileSize, 1 * tileSize),
-        Pawn(size, sf::Color::Black, 6 * tileSize, 1 * tileSize),
-        Pawn(size, sf::Color::Black, 7 * tileSize, 1 * tileSize)
-    };
+        whitePawns[i] = new WhitePawn(i * tileSize, 6 * tileSize, "white_pawn.png"); 
+        blackPawns[i] = new BlackPawn(i * tileSize, 1 * tileSize, "black_pawn.png"); 
+    }
+
+    for (int i = 0; i < 2; i++)
+    {
+        whiteRooks[i] = new WhiteRook(i * 7 * tileSize, 7 * tileSize, "white_rook.png");
+        blackRooks[i] = new BlackRook(i * 7 * tileSize, 0 * tileSize, "black_rook.png");
+
+        whiteKnights[i] = new WhiteKnight((1 + i * 5) * tileSize, 7 * tileSize, "white_knight.png");
+        blackKnights[i] = new BlackKnight((1 + i * 5) * tileSize, 0 * tileSize, "black_knight.png");
+
+        whiteBishops[i] = new WhiteBishop((2 + i * 3) * tileSize, 7 * tileSize, "white_bishop.png");
+        blackBishops[i] = new BlackBishop((2 + i * 3) * tileSize, 0 * tileSize, "black_bishop.png");
+    }
 
     while (window.isOpen()) 
     {
@@ -113,18 +190,55 @@ int main()
         window.clear();
         board.make(window);
 
-        for (int i = 0; i < 8; i++) 
+        for (int i = 0; i < 8; i++)
         {
-            whitePawns[i].draw(window);
+            whitePawns[i]->make(window);
+            blackPawns[i]->make(window);
         }
 
-        for (int i = 0; i < 8; i++) 
+        for (int i = 0; i < 2; i++)
         {
-            blackPawns[i].draw(window);
+            whiteRooks[i]->make(window);
+            blackRooks[i]->make(window);
+
+            whiteKnights[i]->make(window);
+            blackKnights[i]->make(window);
+
+            whiteBishops[i]->make(window);
+            blackBishops[i]->make(window);
         }
+
+        whiteQueen->make(window);
+        blackQueen->make(window);
+
+        whiteKing->make(window);
+        blackKing->make(window);
 
         window.display();
     }
+
+    for (int i = 0; i < 8; i++)
+    {
+        delete whitePawns[i];
+        delete blackPawns[i];
+    }
+
+    for (int i = 0; i < 2; i++)
+    {
+        delete whiteRooks[i];
+        delete blackRooks[i];
+
+        delete whiteKnights[i];
+        delete blackKnights[i];
+
+        delete whiteBishops[i];
+        delete blackBishops[i];
+    }
+
+    delete whiteQueen;
+    delete blackQueen;
+    delete whiteKing;
+    delete blackKing;
 
     return 0;
 }

@@ -1,0 +1,7 @@
+all: compile link
+	
+compile:	
+	g++ -Isrc/include -c chess_game.cpp 
+
+link:
+	g++ chess_game.o -o chess_game -Lsrc/lib -lsfml-graphics -lsfml-window -lsfml-system
