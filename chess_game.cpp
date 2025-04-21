@@ -8,33 +8,18 @@ const float tileSize = windowWidth / 8.0f;
 
 class chessBoard 
 {
-    int rows;
-    int columns;
+    string image;
 
 public:
-    chessBoard(int r, int c) : rows(r), columns(c) {}
+    chessBoard(string i) : image(i) {}
 
     void make(sf::RenderWindow& window)
     {
-        sf::RectangleShape square(sf::Vector2f(tileSize, tileSize));
+        sf::Texture texture(image);
+        sf::Sprite sprite(texture);
+        sprite.setPosition(sf::Vector2f(0, 0));
 
-        for (int i = 0; i < rows; i++) 
-        {
-            for (int j = 0; j < columns; j++) 
-            {
-                if ((i + j) % 2 == 0) 
-                {
-                    square.setFillColor(sf::Color(130, 70, 52));  
-                }
-                else 
-                {
-                    square.setFillColor(sf::Color(99, 53, 53));  
-                }
-
-                square.setPosition(sf::Vector2f(j * tileSize, i * tileSize));
-                window.draw(square);
-            }
-        }
+        window.draw(sprite);
     }
 };
 
@@ -137,7 +122,7 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode({windowLength, windowWidth}), "Chess Game");
 
-    chessBoard board(8, 8);
+    chessBoard board("chess_board.png");
 
     WhitePawn* whitePawns[8];
     BlackPawn* blackPawns[8];
@@ -175,6 +160,8 @@ int main()
         blackBishops[i] = new BlackBishop((2 + i * 3) * tileSize, 0 * tileSize, "black_bishop.png");
     }
 
+    window.setSize(sf::Vector2u(1080, 1080));
+
     while (window.isOpen()) 
     {
         while (auto event = window.pollEvent()) 
@@ -186,6 +173,7 @@ int main()
         }
 
         window.clear();
+
         board.make(window);
 
         for (int i = 0; i < 8; i++)
