@@ -7,6 +7,8 @@ ChessGame::ChessGame()
     sf::RenderWindow window(sf::VideoMode({windowLength, windowWidth}), "Chess Game");
     window.setSize(sf::Vector2u(1080, 1080));
 
+    board = new ChessBoard("src\\textures\\chess_board.png");
+
     for (int i = 0; i < 8; i++) 
     {
         whitePawns[i] = new Pawn(i * tileSize, 6 * tileSize, "src\\textures\\white_pawn.png");
@@ -101,5 +103,3 @@ ChessGame::~ChessGame()
     delete whiteKing;
     delete blackKing;
 }
-
-
