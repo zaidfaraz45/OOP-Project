@@ -1,7 +1,7 @@
 all: compile link
 
 compile:
-	g++ -Isrc/include -c ChessGame.cpp ChessBoard.cpp ChessPiece.cpp Pawn.cpp Rook.cpp Knight.cpp Bishop.cpp Queen.cpp King.cpp
+	g++ -Isrc/include -c ChessGame.cpp ChessBoard.cpp ChessPiece.cpp Pawn.cpp Rook.cpp Knight.cpp Bishop.cpp Queen.cpp King.cpp ChessGame.cpp
 
 link:
-	g++ -Isrc/include -Lsrc/lib chess_game.o ChessBoard.o ChessPiece.o Pawn.o Rook.o Knight.o Bishop.o Queen.o King.o -o ChessGame -lsfml-graphics -lsfml-window -lsfml-system
+	g++ -Isrc/include -Lsrc/lib chess_game.o ChessBoard.o ChessPiece.o Pawn.o Rook.o Knight.o Bishop.o Queen.o King.o ChessGame.o -o ChessGame -lsfml-graphics -lsfml-window -lsfml-system

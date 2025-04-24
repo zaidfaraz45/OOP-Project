@@ -1,50 +1,19 @@
 #include "ChessGame.h"
-#include "global.h"
-#include "ChessBoard.h"
-#include "Pawn.h"
-#include "Rook.h"
-#include "Knight.h"
-#include "Bishop.h"
-#include "Queen.h"
-#include "King.h"
 #include <iostream>
 using namespace std;
 
-void ChessGame::renderWindow()
+ChessGame::ChessGame()
 {
     sf::RenderWindow window(sf::VideoMode({windowLength, windowWidth}), "Chess Game");
     window.setSize(sf::Vector2u(1080, 1080));
-}
 
-void ChessGame::setup()
-{
-    ChessBoard board("src\\textures\\chess_board.png");
-
-    Pawn* whitePawns[8];
-    Pawn* blackPawns[8];
-
-    Rook* whiteRooks[2];
-    Rook* blackRooks[2];
-
-    Knight* whiteKnights[2];
-    Knight* blackKnights[2];
-
-    Bishop* whiteBishops[2];
-    Bishop* blackBishops[2];
-
-    Queen* whiteQueen = new Queen(3 * tileSize, 7 * tileSize, "src\\textures\\white_queen.png");
-    Queen* blackQueen = new Queen(3 * tileSize, 0 * tileSize, "src\\textures\\black_queen.png");
-
-    King* whiteKing = new King(4 * tileSize, 7 * tileSize, "src\\textures\\white_king.png");
-    King* blackKing = new King(4 * tileSize, 0 * tileSize, "src\\textures\\black_king.png");
-
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 8; i++) 
     {
         whitePawns[i] = new Pawn(i * tileSize, 6 * tileSize, "src\\textures\\white_pawn.png");
         blackPawns[i] = new Pawn(i * tileSize, 1 * tileSize, "src\\textures\\black_pawn.png");
     }
 
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 2; i++) 
     {
         whiteRooks[i] = new Rook(i * 7 * tileSize, 7 * tileSize, "src\\textures\\white_rook.png");
         blackRooks[i] = new Rook(i * 7 * tileSize, 0 * tileSize, "src\\textures\\black_rook.png");
@@ -55,6 +24,12 @@ void ChessGame::setup()
         whiteBishops[i] = new Bishop((2 + i * 3) * tileSize, 7 * tileSize, "src\\textures\\white_bishop.png");
         blackBishops[i] = new Bishop((2 + i * 3) * tileSize, 0 * tileSize, "src\\textures\\black_bishop.png");
     }
+
+    whiteQueen = new Queen(3 * tileSize, 7 * tileSize, "src\\textures\\white_queen.png");
+    blackQueen = new Queen(3 * tileSize, 0 * tileSize, "src\\textures\\black_queen.png");
+
+    whiteKing = new King(4 * tileSize, 7 * tileSize, "src\\textures\\white_king.png");
+    blackKing = new King(4 * tileSize, 0 * tileSize, "src\\textures\\black_king.png");
 }
 
 void ChessGame::display()
@@ -71,7 +46,7 @@ void ChessGame::display()
 
         window.clear();
 
-        board.make(window);
+        board->make(window);
 
         for (int i = 0; i < 8; i++)
         {
@@ -100,4 +75,31 @@ void ChessGame::display()
         window.display();
     }
 }
+
+ChessGame::~ChessGame()
+{
+    for (int i = 0; i < 8; i++)
+    {
+        delete whitePawns[i];
+        delete blackPawns[i];
+    }
+
+    for (int i = 0; i < 2; i++)
+    {
+        delete whiteRooks[i];
+        delete blackRooks[i];
+
+        delete whiteKnights[i];
+        delete blackKnights[i];
+
+        delete whiteBishops[i];
+        delete blackBishops[i];
+    }
+
+    delete whiteQueen;
+    delete blackQueen;
+    delete whiteKing;
+    delete blackKing;
+}
+
 
